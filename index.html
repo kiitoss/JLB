@@ -3,14 +3,122 @@
 <head>
   <meta charset="UTF-8">
   <title>JLB</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    #modal-pseudo {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.7);
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    #modal-pseudo > .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    #modal-pseudo #input-pseudo {
+      height: 10vh;
+      width: 50vw;
+      text-align: center;
+      font-size: 20px;
+    }
+    .btn-choice {
+      width: 100%;
+      height: 47.5vh;
+      font-size: 100px;
+      color: white;
+      font-family: 'Dancing Script', cursive;
+    }
+    #btn-pseudo {
+      height: 5vh;
+      width: 100%;
+      font-size: 25px;
+      font-family: 'Abel', sans-serif;
+      color: white;
+      background-color: black;
+      border: 0;
+    }
+    #btn-yes {
+      background-color: green;
+    }
+    #btn-no {
+      background-color: red;
+    }
+  </style>
 </head>
 <body>
-  <h1>JLB</h1>
-  <button>Oui</button>
-  <button>Non</button>
+  
+  <button id="btn-yes" class="btn-choice" onclick="btn_yes_clicked()">Oui</button>
+  <button id="btn-pseudo" onclick="open_modal_pseudo()"></button>
+  <button id="btn-no" class="btn-choice" onclick="btn_no_clicked()">Non</button>
+  
+  <div id="modal-pseudo" onclick="modal_pseudo_clicked(event)">
+    <div class="modal-content">
+      <input id="input-pseudo" type="text" placeholder="Nouveau pseudo" onchange="validate_new_pseudo()">
+    </div>
+  </div>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    var socket = io();
+    const socket = io();
+
+    var pseudo;
+    const default_pseudo = "anonyme";
+    const modal_pseudo = document.getElementById("modal-pseudo");
+    const input_pseudo = document.getElementById("input-pseudo");
+
+    function update_btn_pseudo() {
+      document.getElementById("btn-pseudo").innerHTML = pseudo;
+    }
+    function validate_new_pseudo() {
+      let new_pseudo = input_pseudo.value;
+      if (!new_pseudo) new_pseudo = default_pseudo;
+      localStorage.setItem("jlb-pseudo", new_pseudo);
+      pseudo = new_pseudo;
+      update_btn_pseudo();
+      close_modal_pseudo();
+    }
+
+    function btn_yes_clicked() {
+      console.log("Oui");
+    }
+
+    function btn_no_clicked() {
+      console.log("Non");
+    }
+
+    function close_modal_pseudo() {
+      modal_pseudo.style.display = "none";
+    }
+
+    function modal_pseudo_clicked(event) {
+      if (event.target.id !== "input-pseudo") close_modal_pseudo();
+    }
+
+    function open_modal_pseudo() {
+      modal_pseudo.style.display = "block";
+      input_pseudo.placeholder = pseudo;
+      input_pseudo.value = "";
+      input_pseudo.focus();
+    }
+
+    function main() {
+      pseudo = localStorage.getItem("jlb-pseudo");
+      if (!pseudo) pseudo = default_pseudo;
+      update_btn_pseudo();
+    }
+
+    main();
   </script>
 </body>
 </html>
