@@ -14,7 +14,16 @@
   <button id="btn-pseudo" onclick="open_modal_pseudo()"></button>
   <button id="btn-no" class="btn-choice" onclick="btn_no_clicked()">Non</button>
   
-  <div id="modal-pseudo" onclick="modal_pseudo_clicked(event)">
+  <div id="modal-results" class="modal">
+    <h1 id="result-verdict"></h1>
+    <div class="modal-content">
+      <ul id="list-results">
+      </ul>
+    </div>
+    <button id="btn-start-again">Recommencer</button>
+  </div>
+
+  <div id="modal-pseudo" class="modal" onclick="modal_pseudo_clicked(event)">
     <div class="modal-content">
       <input id="input-pseudo" type="text" placeholder="Nouveau pseudo" onchange="validate_new_pseudo()">
     </div>
